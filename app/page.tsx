@@ -1,69 +1,62 @@
-import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowDownRight,
+  ArrowRight,
+  CirclePlay,
+  Sparkles,
+  Star,
+  Trophy,
+} from "lucide-react";
+import { Brand } from "@/components/ui";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="landing">
+      <section className="landing-hero">
+        <div className="hero-copy">
+          <p className="hero-overline"><span /> THE LHEA AWARDS · 2026</p>
+          <h1>Great work deserves <span>your vote.</span></h1>
+          <p className="hero-description">Celebrate the artists, creators, and storytellers making a difference. Discover the nominees and help decide who takes home the honour.</p>
+          <div className="hero-actions">
+            <Link href="/categories" className="button button-primary button-large">Explore the nominees <ArrowRight size={17} /></Link>
+            <Link href="/dashboard" className="text-link"><CirclePlay size={17} /> How voting works</Link>
+          </div>
+          <div className="hero-proof">
+            <div className="proof-avatars" aria-hidden="true"><i>K</i><i>S</i><i>A</i><i>+</i></div>
+            <span><strong>A platform for the people</strong><br />Your voice. Your awards.</span>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="hero-art" aria-label="LHEA awards illustration">
+          <div className="art-orbit art-orbit-one" />
+          <div className="art-orbit art-orbit-two" />
+          <div className="art-glow" />
+          <div className="art-stamp"><Sparkles size={14} /> THE PEOPLE&apos;S CHOICE</div>
+          <div className="trophy-stage">
+            <div className="trophy-halo"><Trophy size={118} strokeWidth={1.1} /></div>
+            <div className="trophy-pedestal"><span>EXCELLENCE</span></div>
+          </div>
+          <div className="art-footnote"><span>01 / 06</span><span>CELEBRATING WHAT MOVES US</span></div>
+          <div className="floating-award-card">
+            <span className="floating-star"><Star size={16} fill="currentColor" /></span>
+            <span><strong>The next winner?</strong><small>That&apos;s up to you.</small></span>
+            <ArrowDownRight size={19} />
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="landing-stats" aria-label="Awards at a glance">
+        <div><strong>06</strong><span>award categories</span></div>
+        <div><strong>OPEN</strong><span>voting status</span></div>
+        <div><strong>YOU</strong><span>choose the winners</span></div>
+        <div className="stats-note"><span className="status-dot" /> Season 2026 is now open</div>
+      </section>
+
+      <footer className="landing-footer">
+        <Brand />
+        <span>Made for celebrating talent.</span>
+        <Link href="/categories">Browse award categories <ArrowRight size={14} /></Link>
+      </footer>
+    </main>
   );
 }
