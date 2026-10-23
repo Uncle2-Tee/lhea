@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check, Copy, Star, Ticket, Trophy } from "lucide-react";
+import { ArrowRight, Check, Copy, Star, Ticket, Trophy } from "lucide-react";
 import { useState } from "react";
 import { useDemoState } from "@/components/demo-provider";
 import { categories, getNominee } from "@/lib/election-data";
@@ -29,12 +29,12 @@ export function DashboardMetrics() {
         <strong>{ready ? state.votes.length : "—"}</strong>
         <span className="metric-foot">Your activity is private</span>
       </article>
-      <Link href="/payment" className="metric-card metric-action">
-        <span className="metric-icon metric-ink"><ArrowUpRight size={18} /></span>
-        <span className="metric-label">Ready when you are</span>
-        <strong>Get voting codes</strong>
-        <span className="metric-foot">Preview packs are free <ArrowRight size={13} /></span>
-      </Link>
+      <article className="metric-card metric-summary">
+        <span className="metric-icon metric-ink"><Ticket size={18} /></span>
+        <span className="metric-label">Voting codes</span>
+        <strong>Preview packs</strong>
+        <span className="metric-foot">Free in preview mode</span>
+      </article>
     </section>
   );
 }

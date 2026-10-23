@@ -28,7 +28,7 @@ const navigation = [
 
 export function AppFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { state } = useDemoState();
+  const { state, error } = useDemoState();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -100,7 +100,10 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
         ) : null}
 
         <main className="workspace">
-          <div className="workspace-content">{children}</div>
+          <div className="workspace-content">
+            {error ? <p className="form-error" role="alert">{error}</p> : null}
+            {children}
+          </div>
         </main>
 
         <nav className="mobile-tabbar" aria-label="Quick navigation">

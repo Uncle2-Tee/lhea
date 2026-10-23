@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, CircleHelp, Sparkles, Star, Trophy } from "lucide-react";
+import { ArrowRight, CircleHelp, Sparkles, Star, Trophy } from "lucide-react";
 import { AppFrame } from "@/components/app-frame";
 import { DashboardMetrics } from "@/components/account-panels";
 import { PageHeading } from "@/components/ui";
@@ -21,7 +21,6 @@ export default function DashboardPage() {
           <span className="hero-tag"><Sparkles size={14} /> SEASON 2026 IS OPEN</span>
           <h2>Who gets your vote?</h2>
           <p>Six categories. A whole lot of talent. Take a look around and make your picks count.</p>
-          <Link href="/categories" className="button button-gold">Browse the nominees <ArrowRight size={16} /></Link>
         </div>
         <div className="dashboard-hero-art">
           <div className="dashboard-art-circle"><Trophy size={78} strokeWidth={1.1} /></div>
@@ -35,17 +34,16 @@ export default function DashboardPage() {
       <section className="dashboard-section">
         <div className="section-heading-row section-heading-compact">
           <div><p className="eyebrow">START HERE</p><h2>Explore categories</h2></div>
-          <Link className="text-link" href="/categories">View all <ArrowRight size={15} /></Link>
         </div>
         <div className="workspace-category-grid">
           {categories.slice(0, 3).map((category, index) => (
-            <Link key={category.id} href={`/categories/${category.id}`} className="workspace-category-card">
+            <article key={category.id} className="workspace-category-card">
               <span className={`category-number category-number-${index + 1}`}>0{index + 1}</span>
               <span className="workspace-category-icon"><Star size={18} /></span>
               <h3>{category.name}</h3>
               <p>{category.description}</p>
-              <span className="card-link">{category.nominees.length} nominees <ChevronRight size={15} /></span>
-            </Link>
+              <span className="category-count">{category.nominees.length} nominees</span>
+            </article>
           ))}
         </div>
       </section>
@@ -55,12 +53,11 @@ export default function DashboardPage() {
           <div className="panel-heading"><div><p className="eyebrow">IN THE SPOTLIGHT</p><h2>Featured nominees</h2></div><Trophy size={18} /></div>
           <div className="featured-list">
             {recentNominees.map((nominee, index) => (
-              <Link href={`/nominees/${nominee.id}`} className="featured-row" key={nominee.id}>
+              <article className="featured-row" key={nominee.id}>
                 <span className="nominee-avatar" style={{ backgroundColor: nominee.accent }}>{nominee.name.split(" ").map((part) => part[0]).join("").slice(0, 2)}</span>
                 <span className="featured-name"><strong>{nominee.name}</strong><small>Best Artist · Sample nominee</small></span>
                 <span className="featured-rank">0{index + 1}</span>
-                <ChevronRight size={16} />
-              </Link>
+              </article>
             ))}
           </div>
         </div>

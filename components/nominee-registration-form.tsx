@@ -22,7 +22,7 @@ function readPhoto(file: File) {
 
 export function NomineeRegistrationForm() {
   const router = useRouter();
-  const { state, ready, commit, error } = useDemoState();
+  const { state, ready, registerNominee, error } = useDemoState();
   const [formError, setFormError] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -66,22 +66,15 @@ export function NomineeRegistrationForm() {
       }
 
       const nominee = {
-        id: crypto.randomUUID(),
         name,
-        detail: "Registered nominee",
-        accent: "#b5a4f5",
         categoryId,
         email,
         phone,
         bio,
         photoDataUrl: await readPhoto(photo),
-        createdAt: new Date().toISOString(),
       };
-      const saved = commit({
-        ...state,
-        registeredNominees: [nominee, ...state.registeredNominees],
-      });
-      if (saved) router.push(`/nominees/${nominee.id}`);
+      const nomineeId = await registerNominee(nominee);
+      if (nomineeId) router.push(`/nominees/${nomineeId}`);
     } catch (registrationError) {
       setFormError(registrationError instanceof Error
         ? registrationError.message
@@ -116,10 +109,10 @@ export function NomineeRegistrationForm() {
       </label>
       <label className="field">
         <span>Profile photo</span>
-        <span className="field-control"><ImagePlus size={17} /><input name="photo" type="file" accept="image/*" required /></span>
-        <small>Image file, up to 1 MB. Stored only in this browser preview.</small>
+        <span className="field-control"><ImagePlus size={17} /><input name="photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required /></span>
+        <small>JPEG, PNG, WebP, or GIF image, up to 1 MB.</small>
       </label>
-      <p className="form-note">Submitting publishes this nominee in this browser preview immediately. Contact details are not shown on the public profile.</p>
+      <p className="form-note">Submitting stores this nominee in your private browser session. Contact details are not shown on the profile.</p>
       {formError || error ? <p className="form-error" role="alert">{formError || error}</p> : null}
       <button className="button button-primary button-full" type="submit" disabled={!ready}>
         Register nominee <ArrowRight size={16} />

@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model BrowserSession {
+  id                 String              @id @db.Uuid
+  createdAt          DateTime            @default(now())
+  lastSeenAt         DateTime            @default(now())
+  codes              VotingCode[]
+  votes              DemoVote[]
+  registeredNominees RegisteredNominee[]
+}
+
+model VotingCode {
+  id        String         @id @db.Uuid
+  sessionId String         @db.Uuid
+  value     String         @unique
+  total     Int
+  remaining Int
+  createdAt DateTime       @default(now())
+  session   BrowserSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  votes     DemoVote[]
+
+  @@unique([id, sessionId])
+  @@index([sessionId])
+}
+
+model DemoVote {
+  id         String         @id @db.Uuid
+  sessionId  String         @db.Uuid
+  codeId     String         @db.Uuid
+  nomineeId  String
+  categoryId String
+  createdAt  DateTime       @default(now())
+  session    BrowserSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  code       VotingCode     @relation(fields: [codeId, sessionId], references: [id, sessionId], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([codeId])
+  @@index([nomineeId])
+  @@index([categoryId])
+}
+
+model RegisteredNominee {
+  id           String         @id @db.Uuid
+  sessionId    String         @db.Uuid
+  name         String
+  detail       String
+  accent       String
+  categoryId   String
+  email        String
+  phone        String
+  bio          String         @db.Text
+  photoDataUrl String         @db.Text
+  createdAt    DateTime       @default(now())
+  session      BrowserSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, email])
+  @@index([sessionId])
+  @@index([categoryId])
+}

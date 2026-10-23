@@ -7,16 +7,9 @@ import { type FormEvent, useState } from "react";
 import { useDemoState } from "@/components/demo-provider";
 import { votePackages } from "@/lib/election-data";
 
-function createCode() {
-  const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const bytes = crypto.getRandomValues(new Uint8Array(12));
-  const part = Array.from(bytes, (byte) => letters[byte % letters.length]).join("");
-  return `LHEA-${part.slice(0, 4)}-${part.slice(4, 8)}-${part.slice(8)}`;
-}
-
 export function PurchaseForm() {
   const router = useRouter();
-  const { state, ready, commit, error } = useDemoState();
+  const { ready, createCode, error } = useDemoState();
   const [packageIndex, setPackageIndex] = useState(1);
   const [method, setMethod] = useState<"mobile" | "card">("mobile");
   const [network, setNetwork] = useState("MTN MoMo");
@@ -24,7 +17,7 @@ export function PurchaseForm() {
 
   const selectedPackage = votePackages[packageIndex];
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormError("");
     if (!ready) {
@@ -32,20 +25,7 @@ export function PurchaseForm() {
       return;
     }
 
-    const code = createCode();
-    const saved = commit({
-      ...state,
-      codes: [
-        {
-          id: crypto.randomUUID(),
-          value: code,
-          total: selectedPackage.votes,
-          remaining: selectedPackage.votes,
-          createdAt: new Date().toISOString(),
-        },
-        ...state.codes,
-      ],
-    });
+    const saved = await createCode(selectedPackage.votes);
     if (saved) router.push("/payment/success");
   }
 
@@ -143,7 +123,7 @@ export function PurchaseSuccessPanel() {
       <span className="success-icon"><Check size={22} /></span>
       <span className="eyebrow">DEMO TRANSACTION · NO PAYMENT TAKEN</span>
       <h2>Your voting code is ready.</h2>
-      <p>Save this code. It is stored in this browser and can be used to cast demo votes.</p>
+      <p>Save this code. It is securely stored for this browser and can be used to cast demo votes.</p>
       <div className="generated-code">
         <code>{code.value}</code>
         <button className="icon-button" type="button" onClick={copyCode} aria-label="Copy voting code"><Copy size={16} /></button>

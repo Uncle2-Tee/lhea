@@ -20,6 +20,25 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Database setup
+
+Prisma uses `DATABASE_URL` for the app's pooled PostgreSQL connection and
+`DIRECT_URL` for Prisma CLI schema operations. Both are loaded from `.env.local`.
+Voter data is stored in PostgreSQL under a private, HTTP-only browser-session
+cookie; clearing that cookie loses access to that browser's data.
+
+After installing dependencies, generate and validate the Prisma Client:
+
+```bash
+npm run db:generate
+npm run db:validate
+```
+
+`npm run db:push` applies the Prisma schema to the configured database. Review
+the target database and schema changes before running it. The app needs this
+step before its voting-code, vote, and nominee-registration flows can use the
+database.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

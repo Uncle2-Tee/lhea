@@ -9,12 +9,12 @@ import type { AwardCategory, Nominee } from "@/lib/election-data";
 
 export function CastVote({ category, nominee }: { category: AwardCategory; nominee: Nominee }) {
   const router = useRouter();
-  const { state, ready, commit, error } = useDemoState();
+  const { state, ready, castVote, error } = useDemoState();
   const [selectedCode, setSelectedCode] = useState("");
   const [message, setMessage] = useState("");
   const availableCodes = state.codes.filter((code) => code.remaining > 0);
 
-  function cast() {
+  async function cast() {
     setMessage("");
     if (!ready) {
       setMessage("Your voting codes are still loading. Please try again.");
@@ -26,22 +26,7 @@ export function CastVote({ category, nominee }: { category: AwardCategory; nomin
       return;
     }
 
-    const saved = commit({
-      ...state,
-      codes: state.codes.map((item) =>
-        item.id === code.id ? { ...item, remaining: item.remaining - 1 } : item,
-      ),
-      votes: [
-        {
-          id: crypto.randomUUID(),
-          codeId: code.id,
-          nomineeId: nominee.id,
-          categoryId: category.id,
-          createdAt: new Date().toISOString(),
-        },
-        ...state.votes,
-      ],
-    });
+    const saved = await castVote(code.id, nominee.id, category.id);
     if (saved) router.push("/votes/success");
   }
 
